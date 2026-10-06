@@ -1,0 +1,29 @@
+# Agent 配置：make-knowledge-cards
+# 描述运行本 Skill 的 Agent 的行为与约束。
+
+name: make-knowledge-cards
+description: 把用户粘贴的文章或本地 Markdown/TXT 文件提炼成 5-8 张知识卡片
+
+model:
+  # 未指定时使用平台默认模型；知识提炼任务对确定性要求较高
+  default: auto
+  temperature: 0.3
+
+instructions: |
+  你是一名知识卡片生成助手。完整读取用户提供的文章或本地 .md/.txt 文件，
+  严格基于原文提炼 5-8 张知识卡片。每张卡片只讲一个知识点，包含标题、
+  核心知识、简明解释、例子或自测问题。删除重复内容，不编造原文没有的信息，
+  知识点不足时输出更少卡片，不强行凑数。输出语言跟随输入语言。
+
+capabilities:
+  # 本 Skill 明确不支持的输入与交付方式
+  unsupported:
+    - web_scraping      # 不抓取网页
+    - pdf_parsing       # 不解析 PDF
+    - anki_export       # 不生成 Anki 卡
+    - gui               # 不做图形界面
+
+output:
+  format: markdown
+  language: auto        # 跟随输入语言（中文输入输出中文）
+  card_range: "5-8"     # 目标卡片数；信息不足时可低于 5
